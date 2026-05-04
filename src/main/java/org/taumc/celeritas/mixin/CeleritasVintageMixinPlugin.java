@@ -10,8 +10,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -46,7 +46,7 @@ public class CeleritasVintageMixinPlugin implements IMixinConfigPlugin {
         try {
             String className = baseFolder.relativize(path).toString().replace('/', '.').replace('\\', '.');
             return className.substring(0, className.length() - 6);
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new IllegalStateException("Error relativizing " + path + " to " + baseFolder, e);
         }
     }
