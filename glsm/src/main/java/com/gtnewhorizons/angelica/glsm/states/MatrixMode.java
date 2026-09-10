@@ -27,7 +27,8 @@ public class MatrixMode implements ISettableState<MatrixMode> {
             case GL11.GL_MODELVIEW -> GL11.GL_MODELVIEW_MATRIX;
             case GL11.GL_PROJECTION -> GL11.GL_PROJECTION_MATRIX;
             case GL11.GL_TEXTURE -> GL11.GL_TEXTURE_MATRIX;
-            default -> throw new IllegalStateException("Unexpected value: " + mode);
+            case GL11.GL_COLOR -> 0x80B1; // GL_COLOR_MATRIX (ARB_imaging)
+            default -> GL11.GL_MODELVIEW_MATRIX;
         };
     }
 
