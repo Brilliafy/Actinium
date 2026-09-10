@@ -86,6 +86,14 @@ class GLStateManagerRedirectContractTest {
         );
     }
 
+    @Test
+    void colorMatrixGetterExists() throws IOException {
+        assertTrue(
+            methodDescriptors("getColorMatrix").contains("()Lorg/joml/Matrix4fStack;"),
+            "GLStateManager must expose getColorMatrix() for GL_COLOR matrix operations"
+        );
+    }
+
     private static Set<String> methodDescriptors(String methodName) throws IOException {
         ClassNode classNode = new ClassNode();
         try (InputStream in = GLStateManagerRedirectContractTest.class.getClassLoader()
