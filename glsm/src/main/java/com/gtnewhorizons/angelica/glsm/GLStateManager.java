@@ -70,6 +70,7 @@ import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 
+import org.lwjgl.opengl.ARBImaging;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.Display;
@@ -1092,8 +1093,8 @@ public class GLStateManager {
             case GL11.GL_COLOR_MATERIAL_PARAMETER -> colorMaterialParameter.getValue();
             case GL11.GL_MODELVIEW_STACK_DEPTH -> getMatrixStackDepth(modelViewMatrix);
             case GL11.GL_PROJECTION_STACK_DEPTH -> getMatrixStackDepth(projectionMatrix);
-            case 0x80B2 /* GL_COLOR_MATRIX_STACK_DEPTH */ -> getMatrixStackDepth(colorMatrix);
-            case 0x80B3 /* GL_MAX_COLOR_MATRIX_STACK_DEPTH */ -> MAX_COLOR_STACK_DEPTH;
+            case ARBImaging.GL_COLOR_MATRIX_STACK_DEPTH -> getMatrixStackDepth(colorMatrix);
+            case ARBImaging.GL_MAX_COLOR_MATRIX_STACK_DEPTH -> MAX_COLOR_STACK_DEPTH;
             case GL11.GL_CULL_FACE_MODE -> polygonState.getCullFaceMode();
             case GL11.GL_FRONT_FACE -> polygonState.getFrontFace();
 
@@ -1212,6 +1213,7 @@ public class GLStateManager {
             case GL11.GL_MODELVIEW_MATRIX -> modelViewMatrix.get(0, params);
             case GL11.GL_PROJECTION_MATRIX -> projectionMatrix.get(0, params);
             case GL11.GL_TEXTURE_MATRIX -> textures.getTextureUnitMatrix(getActiveTextureUnit()).get(0, params);
+            case ARBImaging.GL_COLOR_MATRIX -> colorMatrix.get(0, params);
             case GL11.GL_COLOR_CLEAR_VALUE -> clearColor.get(params);
             case GL11.GL_CURRENT_COLOR -> color.get(params);
             case GL11.GL_DEPTH_RANGE -> {
@@ -3844,6 +3846,7 @@ public class GLStateManager {
                 return colorMatrix;
             }
             default -> {
+                LOGGER.warn("Unknown matrix mode {}, falling back to modelViewMatrix", matrixMode.getMode());
                 return modelViewMatrix;
             }
         }
@@ -3856,7 +3859,10 @@ public class GLStateManager {
             case GL11.GL_PROJECTION -> projGeneration++;
             case GL11.GL_TEXTURE -> texMatrixGeneration++;
             case GL11.GL_COLOR -> colorMatrixGeneration++;
-            default -> mvGeneration++;
+            default -> {
+                LOGGER.warn("Unknown matrix mode {}, falling back to mvGeneration", matrixMode.getMode());
+                mvGeneration++;
+            }
         }
     }
 

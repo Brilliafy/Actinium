@@ -2,10 +2,15 @@ package com.gtnewhorizons.angelica.glsm.states;
 
 import com.gtnewhorizons.angelica.glsm.GLStateManager;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.ARBImaging;
 import org.lwjgl.opengl.GL11;
 
 @Getter
 public class MatrixMode implements ISettableState<MatrixMode> {
+    private static final Logger LOGGER = LogManager.getLogger(MatrixMode.class);
+
     protected int mode = GL11.GL_MODELVIEW;
 
     public void setMode(int mode) {
@@ -27,8 +32,11 @@ public class MatrixMode implements ISettableState<MatrixMode> {
             case GL11.GL_MODELVIEW -> GL11.GL_MODELVIEW_MATRIX;
             case GL11.GL_PROJECTION -> GL11.GL_PROJECTION_MATRIX;
             case GL11.GL_TEXTURE -> GL11.GL_TEXTURE_MATRIX;
-            case GL11.GL_COLOR -> 0x80B1; // GL_COLOR_MATRIX (ARB_imaging)
-            default -> GL11.GL_MODELVIEW_MATRIX;
+            case GL11.GL_COLOR -> ARBImaging.GL_COLOR_MATRIX;
+            default -> {
+                LOGGER.warn("Unknown matrix mode {}, falling back to GL_MODELVIEW_MATRIX", mode);
+                yield GL11.GL_MODELVIEW_MATRIX;
+            }
         };
     }
 
