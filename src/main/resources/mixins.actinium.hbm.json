@@ -8,8 +8,7 @@
   "mixins": [],
   "server": [],
   "client": [
-    "MixinRenderUtil",
-    "MixinTileEntityRendererDispatcherLightmap"
+    "MixinRenderUtil"
   ],
   "injectors": {
     "defaultRequire": 1
